@@ -1,3 +1,5 @@
 .gitignore
-/terraform/ide.tfplan
 .idea/
+/terraform/*.tfplan
+/terraform/*.tfstate*
+.terraform/
