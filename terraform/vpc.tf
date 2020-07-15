@@ -157,7 +157,7 @@ resource "aws_route_table_association" "priv_rt_association2" {
 
 # Endpoint to DynamoDB
 resource "aws_vpc_endpoint" "dyndb_ep" {
-  service_name = join("",["com.amazonaws.", var.region, ".dynamodb"])
+  service_name = join("", ["com.amazonaws.", var.region, ".dynamodb"])
   vpc_id       = aws_vpc.net10.id
   route_table_ids = [
     aws_route_table.priv_rt1.id,
