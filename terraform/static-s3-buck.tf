@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "static_bucket" {
-  acl    = "public-read"
+  acl           = "public-read"
   force_destroy = true
   tags = {
     Project = "MythicalMysfits"
