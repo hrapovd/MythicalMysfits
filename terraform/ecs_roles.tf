@@ -1,5 +1,7 @@
+data "aws_caller_identity" "current" {}
+
 variable "account" {
-  default = ""
+  default = data.aws_caller_identity.current.account_id
 }
 
 resource "aws_security_group" "app_sg" {
