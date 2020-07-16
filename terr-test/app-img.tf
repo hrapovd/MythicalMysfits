@@ -9,6 +9,9 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
+data "aws_ecr_authorization_token" "token" {
+}
+
 resource "null_resource" "test1" {
   provisioner "local-exec" {
     command = <<-EOF
@@ -18,3 +21,13 @@ resource "null_resource" "test1" {
   }
 }
 
+resource "aws_ecr_repository" "ecr_repo" {
+  name = "mythicalmysfits/service"
+  depends_on = [null_resource.test1]
+  provisioner "local-exec" {
+    command = <<-EOF
+    aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${self.repository_url}
+    docker push ${self.repository_url}:latest
+    EOF
+  }
+}
