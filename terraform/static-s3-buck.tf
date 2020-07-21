@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "static_bucket" {
   provisioner "local-exec" {
     command = <<EOT
       sleep 30;
-      aws s3 cp ../aws-modern-application-workshop/module-1/web/index.html s3://${self.bucket}/index.html
+      aws s3 cp ../aws-modern-application-workshop/module-2/web/index.html s3://${self.bucket}/index.html
     EOT
   }
 }

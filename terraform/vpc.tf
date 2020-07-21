@@ -26,7 +26,7 @@ resource "aws_vpc" "net10" {
 resource "aws_subnet" "pub1" {
   cidr_block              = var.vpc_cidr.public1
   vpc_id                  = aws_vpc.net10.id
-  availability_zone = data.aws_availability_zones.available.names[0]
+  availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = true
   depends_on              = [aws_internet_gateway.gw10]
   tags = {
@@ -37,7 +37,7 @@ resource "aws_subnet" "pub1" {
 resource "aws_subnet" "pub2" {
   cidr_block              = var.vpc_cidr.public2
   vpc_id                  = aws_vpc.net10.id
-  availability_zone = data.aws_availability_zones.available.names[1]
+  availability_zone       = data.aws_availability_zones.available.names[1]
   map_public_ip_on_launch = true
   depends_on              = [aws_internet_gateway.gw10]
   tags = {
@@ -48,7 +48,7 @@ resource "aws_subnet" "pub2" {
 resource "aws_subnet" "priv1" {
   cidr_block              = var.vpc_cidr.private1
   vpc_id                  = aws_vpc.net10.id
-  availability_zone = data.aws_availability_zones.available.names[0]
+  availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = false
   tags = {
     Project = "MythicalMysfits"
@@ -58,7 +58,7 @@ resource "aws_subnet" "priv1" {
 resource "aws_subnet" "priv2" {
   cidr_block              = var.vpc_cidr.private2
   vpc_id                  = aws_vpc.net10.id
-  availability_zone = data.aws_availability_zones.available.names[1]
+  availability_zone       = data.aws_availability_zones.available.names[1]
   map_public_ip_on_launch = false
   tags = {
     Project = "MythicalMysfits"

@@ -1,8 +1,8 @@
 data "aws_caller_identity" "current" {}
 
-variable "account" {
-  default = data.aws_caller_identity.current.account_id
-}
+#variable "account" {
+#  default = data.aws_caller_identity.current.account_id
+#}
 
 resource "aws_security_group" "app_sg" {
   description = "Access to the fargate containers from the Internet"
@@ -250,7 +250,7 @@ resource "aws_iam_role_policy" "code_build_policy" {
           "codecommit:Get*",
           "codecommit:GitPull"
         ],
-        "Resource": join("",["arn:aws:codecommit:",${var.region},":",${var.account},":MythicalMysfitsServiceRepository"])
+        "Resource": join("",["arn:aws:codecommit:",${var.region},":",${data.aws_caller_identity.current.account_id},":MythicalMysfitsServiceRepository"])
       },
       {
         "Effect": "Allow",
@@ -282,4 +282,8 @@ resource "aws_iam_role_policy" "code_build_policy" {
     ]
   }
   POLICY7
+}
+
+resource "aws_iam_service_linked_role" "ecs_linked_role" {
+  aws_service_name = "ecs.amazonaws.com"
 }
