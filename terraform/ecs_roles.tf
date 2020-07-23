@@ -238,7 +238,7 @@ resource "aws_iam_role_policy" "code_build_policy" {
   name   = "MythicalMysfitsService-CodeBuildServicePolicy"
   role   = aws_iam_role.code_build.id
   policy = <<-POLICY7
-    {
+  {
     "Version": "2012-10-17",
     "Statement": [
       {
@@ -250,7 +250,7 @@ resource "aws_iam_role_policy" "code_build_policy" {
           "codecommit:Get*",
           "codecommit:GitPull"
         ],
-        "Resource": join("",["arn:aws:codecommit:",${var.region},":",${data.aws_caller_identity.current.account_id},":MythicalMysfitsServiceRepository"])
+        "Resource": ${join("",["arn:aws:codecommit:",${var.region},":",${data.aws_caller_identity.current.account_id},":MythicalMysfitsServiceRepository"])}
       },
       {
         "Effect": "Allow",

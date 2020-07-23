@@ -107,3 +107,6 @@ resource "aws_ecs_service" "ecs_srv1" {
     ]
   }
 }
+output "ecs_nlb_url" {
+  value = aws_lb.ecs_nlb.dns_name
+}
