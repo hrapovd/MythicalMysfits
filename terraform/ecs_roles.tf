@@ -11,7 +11,7 @@ resource "aws_security_group" "app_sg" {
     cidr_blocks = [var.vpc_cidr.vpc]
     from_port   = 0
     protocol    = "-1"
-    to_port     = 80
+    to_port     = 0
   }
   tags = {
     Project = "MythicalMysfits"
@@ -250,7 +250,7 @@ resource "aws_iam_role_policy" "code_build_policy" {
           "codecommit:Get*",
           "codecommit:GitPull"
         ],
-        "Resource": ${join("",["arn:aws:codecommit:",${var.region},":",${data.aws_caller_identity.current.account_id},":MythicalMysfitsServiceRepository"])}
+        "Resource": "arn:aws:codecommit:${var.region}:${data.aws_caller_identity.current.account_id}:MythicalMysfitsServiceRepository"
       },
       {
         "Effect": "Allow",
@@ -282,8 +282,4 @@ resource "aws_iam_role_policy" "code_build_policy" {
     ]
   }
   POLICY7
-}
-
-resource "aws_iam_service_linked_role" "ecs_linked_role" {
-  aws_service_name = "ecs.amazonaws.com"
 }

@@ -14,38 +14,34 @@ resource "aws_ecs_cluster" "cluster1" {
 
 resource "aws_ecs_task_definition" "ecs_task1" {
   family                = "mythicalmysfitsservice"
+  cpu = "256"
+  memory = "512"
+  network_mode = "awsvpc"
+  requires_compatibilities = [
+    "FARGATE"
+  ]
+  execution_role_arn = aws_iam_role.ecs_service.arn
+  task_role_arn = aws_iam_role.ecs_task.arn
   container_definitions = <<-TASK
   [
     {
-      "cpu": "256",
-      "memory": "512",
-      "networkMode": "awsvpc",
-      "requiresCompatibilities": [
-        "FARGATE"
-      ],
-      "executionRoleArn": "${aws_iam_role.ecs_service.arn}",
-      "taskRoleArn": "${aws_iam_role.ecs_task.arn}",
-      "containerDefinitions": [
+      "name": "MythicalMysfits-Service",
+      "image": "${aws_ecr_repository.ecr_repo.repository_url}:latest",
+      "portMappings": [
         {
-          "name": "MythicalMysfits-Service",
-          "image": "${aws_ecr_repository.ecr_repo.repository_url}:latest",
-          "portMappings": [
-            {
-              "containerPort": 8080,
-              "protocol": "http"
-            }
-          ],
-          "logConfiguration": {
-            "logDriver": "awslogs",
-            "options": {
-              "awslogs-group": "${aws_cloudwatch_log_group.cw_group1.name}",
-              "awslogs-region": "${var.region}",
-              "awslogs-stream-prefix": "awslogs-mythicalmysfits-service"
-            }
-          },
-          "essential": true
+          "containerPort": 8080,
+          "protocol": "http"
         }
-      ]
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "${aws_cloudwatch_log_group.cw_group1.name}",
+          "awslogs-region": "${var.region}",
+          "awslogs-stream-prefix": "awslogs-mythicalmysfits-service"
+        }
+      },
+      "essential": true
     }
   ]
   TASK
@@ -92,7 +88,7 @@ resource "aws_ecs_service" "ecs_srv1" {
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 0
   desired_count                      = 1
-  task_definition                    = "mythicalmysfitsservice"
+  task_definition                    = aws_ecs_task_definition.ecs_task1.id
   load_balancer {
     container_name   = "MythicalMysfits-Service"
     container_port   = 8080
@@ -100,7 +96,9 @@ resource "aws_ecs_service" "ecs_srv1" {
   }
   network_configuration {
     assign_public_ip = false
-    security_groups  = [aws_security_group.app_sg.id]
+#TO DO
+#need to check sg
+#    security_groups  = [aws_security_group.app_sg.id]
     subnets = [
       aws_subnet.priv1.id,
       aws_subnet.priv2.id
