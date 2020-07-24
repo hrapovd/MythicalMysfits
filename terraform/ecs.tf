@@ -92,9 +92,6 @@ resource "aws_lb_listener" "ecs_nlb_lstnr1" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.ecs_nlb_tg1.arn
   }
-  tags = {
-    Project = "MythicalMysfits"
-  }
 }
 resource "aws_ecs_service" "ecs_srv1" {
   name                               = "MythicalMysfits-Service"

@@ -15,7 +15,7 @@ resource "aws_security_group" "app_sg" {
     to_port     = 8080
   }
   egress {
-    cidr_blocks = [0.0.0.0/0]
+    cidr_blocks = ["0.0.0.0/0"]
     from_port   = 0
     protocol    = "-1"
     to_port     = 0
