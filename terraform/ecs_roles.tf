@@ -7,8 +7,15 @@ data "aws_caller_identity" "current" {}
 resource "aws_security_group" "app_sg" {
   description = "Access to the fargate containers from the Internet"
   name        = "FargateContainerSecurityGroup"
+  vpc_id = aws_vpc.net10.id
   ingress {
     cidr_blocks = [var.vpc_cidr.vpc]
+    from_port   = 8080
+    protocol    = "TCP"
+    to_port     = 8080
+  }
+  egress {
+    cidr_blocks = [0.0.0.0/0]
     from_port   = 0
     protocol    = "-1"
     to_port     = 0

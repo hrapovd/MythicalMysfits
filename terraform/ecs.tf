@@ -22,6 +22,9 @@ resource "aws_ecs_task_definition" "ecs_task1" {
   ]
   execution_role_arn = aws_iam_role.ecs_service.arn
   task_role_arn = aws_iam_role.ecs_task.arn
+  depends_on = [
+    aws_ecr_repository.ecr_repo
+  ]
   container_definitions = <<-TASK
   [
     {
@@ -45,6 +48,9 @@ resource "aws_ecs_task_definition" "ecs_task1" {
     }
   ]
   TASK
+  tags = {
+    Project = "MythicalMysfits"
+  }
 }
 #aws elbv2 create-load-balancer --name mysfits-nlb --scheme internet-facing --type network --subnets REPLACE_ME_PUBLIC_SUBNET_ONE REPLACE_ME_PUBLIC_SUBNET_TWO > ~/environment/nlb-output.json
 resource "aws_lb" "ecs_nlb" {
@@ -55,6 +61,9 @@ resource "aws_lb" "ecs_nlb" {
     aws_subnet.pub1.id,
     aws_subnet.pub2.id
   ]
+  tags = {
+    Project = "MythicalMysfits"
+  }
 }
 #aws elbv2 create-target-group --name MythicalMysfits-TargetGroup --port 8080 --protocol TCP --target-type ip --vpc-id REPLACE_ME_VPC_ID --health-check-interval-seconds 10 --health-check-path / --health-check-protocol HTTP --healthy-threshold-count 3 --unhealthy-threshold-count 3 > ~/environment/target-group-output.json
 resource "aws_lb_target_group" "ecs_nlb_tg1" {
@@ -70,6 +79,9 @@ resource "aws_lb_target_group" "ecs_nlb_tg1" {
     healthy_threshold   = 3
     unhealthy_threshold = 3
   }
+  tags = {
+    Project = "MythicalMysfits"
+  }
 }
 #aws elbv2 create-listener --default-actions TargetGroupArn=REPLACE_ME_NLB_TARGET_GROUP_ARN,Type=forward --load-balancer-arn REPLACE_ME_NLB_ARN --port 80 --protocol TCP
 resource "aws_lb_listener" "ecs_nlb_lstnr1" {
@@ -79,6 +91,9 @@ resource "aws_lb_listener" "ecs_nlb_lstnr1" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.ecs_nlb_tg1.arn
+  }
+  tags = {
+    Project = "MythicalMysfits"
   }
 }
 resource "aws_ecs_service" "ecs_srv1" {
@@ -96,13 +111,14 @@ resource "aws_ecs_service" "ecs_srv1" {
   }
   network_configuration {
     assign_public_ip = false
-#TO DO
-#need to check sg
-#    security_groups  = [aws_security_group.app_sg.id]
+    security_groups  = [aws_security_group.app_sg.id]
     subnets = [
       aws_subnet.priv1.id,
       aws_subnet.priv2.id
     ]
+  }
+  tags = {
+    Project = "MythicalMysfits"
   }
 }
 output "ecs_nlb_url" {
