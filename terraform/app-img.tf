@@ -22,3 +22,29 @@ resource "aws_ecr_repository" "ecr_repo" {
     Project = "MythicalMysfits"
   }
 }
+resource "aws_ecr_repository_policy" "ecr_repo_policy" {
+  repository = aws_ecr_repository.ecr_repo.id
+  policy = <<-POLICY
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "AllowPushPull",
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": ["${aws_iam_role.code_build.arn}"]
+        },
+        "Action": [
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:PutImage",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload"
+        ]
+      }
+    ]
+  }
+  POLICY
+}
