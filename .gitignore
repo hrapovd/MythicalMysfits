@@ -4,4 +4,4 @@
 /terraform/*.tfstate*
 .terraform/
 /terr-test/*
-!/terr-test/app-img.tf
+terr-test/
