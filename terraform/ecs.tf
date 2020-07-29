@@ -13,15 +13,15 @@ resource "aws_ecs_cluster" "cluster1" {
 }
 
 resource "aws_ecs_task_definition" "ecs_task1" {
-  family                = "mythicalmysfitsservice"
-  cpu = "256"
-  memory = "512"
+  family       = "mythicalmysfitsservice"
+  cpu          = "256"
+  memory       = "512"
   network_mode = "awsvpc"
   requires_compatibilities = [
     "FARGATE"
   ]
   execution_role_arn = aws_iam_role.ecs_service.arn
-  task_role_arn = aws_iam_role.ecs_task.arn
+  task_role_arn      = aws_iam_role.ecs_task.arn
   depends_on = [
     aws_ecr_repository.ecr_repo
   ]

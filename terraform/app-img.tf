@@ -24,7 +24,7 @@ resource "aws_ecr_repository" "ecr_repo" {
 }
 resource "aws_ecr_repository_policy" "ecr_repo_policy" {
   repository = aws_ecr_repository.ecr_repo.id
-  policy = <<-POLICY
+  policy     = <<-POLICY
   {
     "Version": "2012-10-17",
     "Statement": [
